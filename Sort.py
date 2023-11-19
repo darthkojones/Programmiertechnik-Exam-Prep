@@ -106,7 +106,7 @@ print("Discending ", insertion_sort(sack, False))
 # and then look at implementations (Java version) was understandable as I know the syntax already.
 # @ https://www.javatpoint.com/quick-sort and write code step by step. was worth it!!!!
 
-# here we do sorting of half? of the partition?
+# here we do sorting of partition (part of the array)
 def partition (array, start, end, asc = True):
 
     # comparison starts between beginning and end elements
