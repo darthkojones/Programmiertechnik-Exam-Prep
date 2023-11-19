@@ -174,3 +174,18 @@ def greatest_product(num, length):
 
 # Call the function with the 1000-digit number and 13 as the length and print the result
 print(f"Problem 8 - The greatest product of thirteen adjacent digits is: {greatest_product(number, 13)}")
+
+
+
+# Problem 9:
+# Find the product abc of the Pythagorean triplet for which a + b + c = 1000.
+
+def find_pythagorean_triplet(sum_value):
+    for a in range(1, sum_value):
+        for b in range(a, sum_value - a):
+            c = sum_value - a - b  # Calculate c based on the condition a + b + c = sum_value
+            if a*a + b*b == c*c:  # Check if a, b, c form a Pythagorean triplet
+                return a * b * c  # Return the product of a, b, and c
+
+# Call the function with 1000 as the sum value and print the result
+print(f"Problem 9 - The product of the Pythagorean triplet is: {find_pythagorean_triplet(1000)}")
