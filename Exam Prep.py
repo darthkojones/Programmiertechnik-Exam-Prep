@@ -189,3 +189,444 @@ def find_pythagorean_triplet(sum_value):
 
 # Call the function with 1000 as the sum value and print the result
 print(f"Problem 9 - The product of the Pythagorean triplet is: {find_pythagorean_triplet(1000)}")
+
+
+# Problem 10:
+# Find the sum of all the primes below two million.
+
+def is_prime(n):
+    if n <= 1:  # Numbers less than or equal to 1 are not prime
+        return False
+    if n <= 3:  # 2 and 3 are prime numbers
+        return True
+    if n % 2 == 0 or n % 3 == 0:  # Eliminate multiples of 2 and 3
+        return False
+    i = 5
+    while i * i <= n:  # Check only up to the square root of n
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6  # Increase i by 6, since we already checked multiples of 2 and 3
+    return True
+
+def sum_of_primes_below(limit):
+    total = 0  # Initialize the sum of primes to 0
+    for i in range(2, limit):  # Iterate over all numbers from 2 to limit-1
+        if is_prime(i):
+            total += i  # Add the number to the total sum if it is prime
+    return total  # Return the sum of primes
+
+# Call the function with 2000000 as the limit and print the result
+print(f"Problem 10 - The sum of all primes below two million is: {sum_of_primes_below(2000000)}")
+
+
+# Problem 12:
+# Find the value of the first triangle number to have over five hundred divisors.
+
+def count_divisors(n):
+    divisors = 0  # Initialize the count of divisors
+    for i in range(1, int(n**0.5) + 1):  # Only need to check up to the square root of n
+        if n % i == 0:
+            divisors += 2 if i != n // i else 1  # If the divisor is not a square, add 2, otherwise add 1
+    return divisors
+
+def find_triangle_number(divisor_limit):
+    n = 1  # Initialize the term in the sequence
+    triangle_number = 1  # Initialize the first triangle number
+
+    while count_divisors(triangle_number) <= divisor_limit:
+        n += 1  # Increment the term
+        triangle_number += n  # Add the next term to get the next triangle number
+
+    return triangle_number  # Return the first triangle number with over 'divisor_limit' divisors
+
+# Call the function with 500 as the divisor limit and print the result
+print(f"Problem 12 - The first triangle number to have over five hundred divisors is: {find_triangle_number(500)}")
+
+
+# Problem 14:
+# Find the starting number, under one million, that produces the longest Collatz sequence chain.
+
+def collatz_sequence_length(n):
+    length = 1  # Start with a length of 1 for the initial number
+    while n != 1:
+        if n % 2 == 0:
+            n = n // 2  # If n is even, divide it by 2
+        else:
+            n = 3 * n + 1  # If n is odd, multiply by 3 and add 1
+        length += 1  # Increment the length of the sequence
+    return length
+
+def longest_collatz_sequence(limit):
+    max_length = 0  # Initialize the maximum length
+    number = 0  # Initialize the number with the longest sequence
+
+    for i in range(1, limit):
+        length = collatz_sequence_length(i)  # Get the length of the Collatz sequence for i
+        if length > max_length:
+            max_length = length  # Update the maximum length
+            number = i  # Update the number with the longest sequence
+
+    return number  # Return the number with the longest Collatz sequence
+
+# Call the function with 1000000 as the limit and print the result
+print(f"Problem 14 - The starting number under one million that produces the longest chain is: {longest_collatz_sequence(1000000)}")
+
+
+# Problem 15:
+# Calculate the number of routes through a 20x20 grid, moving only to the right and down.
+
+import math
+
+def calculate_routes(grid_size):
+    # The number of movements is equal to grid_size * 2 (right and down movements)
+    total_movements = grid_size * 2
+
+    # The number of routes is the binomial coefficient of total_movements choose grid_size
+    # This is because we choose grid_size movements from total_movements (either right or down)
+    routes = math.comb(total_movements, grid_size)
+
+    return routes
+
+# Calculate the number of routes for a 20x20 grid and print the result
+print(f"Problem 15 - The number of routes through a 20x20 grid is: {calculate_routes(20)}")
+
+
+# Problem 16:
+# Calculate the sum of the digits of the number 2^1000.
+
+def sum_of_digits(number):
+    return sum(int(digit) for digit in str(number))  # Sum the digits of the number
+
+# Calculate 2^1000
+number = 2**1000
+
+# Calculate and print the sum of the digits of 2^1000
+print(f"Problem 16 - The sum of the digits of the number 2^1000 is: {sum_of_digits(number)}")
+
+
+# Problem 17:
+# Calculate the number of letters used if all the numbers from 1 to 1000 are written out in words.
+
+def number_to_words(n):
+    # Define word representations for numbers
+    num_words = {
+        1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five',
+        6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten',
+        11: 'eleven', 12: 'twelve', 13: 'thirteen', 14: 'fourteen', 15: 'fifteen',
+        16: 'sixteen', 17: 'seventeen', 18: 'eighteen', 19: 'nineteen', 20: 'twenty',
+        30: 'thirty', 40: 'forty', 50: 'fifty', 60: 'sixty', 70: 'seventy',
+        80: 'eighty', 90: 'ninety'
+    }
+
+    if n <= 20:
+        return num_words[n]
+    elif n < 100:
+        tens, below_ten = divmod(n, 10)
+        return num_words[tens * 10] + ('' if below_ten == 0 else num_words[below_ten])
+    elif n < 1000:
+        hundreds, below_hundred = divmod(n, 100)
+        return num_words[hundreds] + 'hundred' + ('' if below_hundred == 0 else 'and' + number_to_words(below_hundred))
+    elif n == 1000:
+        return 'onethousand'
+
+def count_letters_in_words(limit):
+    return sum(len(number_to_words(i).replace(' ', '').replace('-', '')) for i in range(1, limit + 1))
+
+# Calculate the total number of letters for numbers from 1 to 1000
+total_letters = count_letters_in_words(1000)
+
+# Print the total number of letters
+print(f"Problem 17 - The total number of letters used is: {total_letters}")
+
+
+# Problem 19:
+# Count how many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000).
+
+import datetime
+
+def count_sundays(start_year, end_year):
+    sunday_count = 0  # Initialize the count of Sundays on the first of the month
+
+    for year in range(start_year, end_year + 1):
+        for month in range(1, 13):
+            if datetime.date(year, month, 1).weekday() == 6:  # Check if the first of the month is a Sunday (weekday 6)
+                sunday_count += 1  # Increment the count
+
+    return sunday_count
+
+# Count the number of Sundays on the first of the month from 1901 to 2000
+sundays = count_sundays(1901, 2000)
+
+# Print the result
+print(f"Problem 19 - The number of Sundays on the first of the month during the 20th century is: {sundays}")
+
+
+# Problem 20:
+# Calculate the sum of the digits in the number 100!
+
+def factorial(n):
+    # Calculate the factorial of n
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+def sum_of_digits(number):
+    # Sum the digits of the given number
+    return sum(int(digit) for digit in str(number))
+
+# Calculate 100!
+factorial_100 = factorial(100)
+
+# Calculate and print the sum of the digits of 100!
+print(f"Problem 20 - The sum of the digits in the number 100! is: {sum_of_digits(factorial_100)}")
+
+
+# Problem 21:
+# Evaluate the sum of all the amicable numbers under 10000.
+
+def sum_of_divisors(n):
+    # Calculate the sum of proper divisors of n
+    divisors = [1]  # Start with 1, as it is a divisor of every number
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            divisors.append(i)
+            if i != n // i:
+                divisors.append(n // i)
+    return sum(divisors)
+
+def find_amicable_numbers(limit):
+    amicable_numbers = set()  # Use a set to avoid duplicates
+
+    for a in range(2, limit):
+        b = sum_of_divisors(a)
+        if b != a and sum_of_divisors(b) == a:
+            amicable_numbers.add(a)
+            amicable_numbers.add(b)
+
+    return sum(amicable_numbers)
+
+# Calculate the sum of all the amicable numbers under 10000
+sum_amicable_numbers = find_amicable_numbers(10000)
+
+# Print the result
+print(f"Problem 21 - The sum of all the amicable numbers under 10000 is: {sum_amicable_numbers}")
+
+
+
+# Problem 23:
+# Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
+
+def sum_of_divisors(n):
+    # Calculate the sum of proper divisors of n
+    divisors = [1]  # Start with 1, as it is a divisor of every number
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            divisors.append(i)
+            if i != n // i:
+                divisors.append(n // i)
+    return sum(divisors)
+
+def is_abundant(n):
+    # Check if a number is abundant
+    return sum_of_divisors(n) > n
+
+def find_non_abundant_sums(limit):
+    abundant_numbers = set()
+    for i in range(1, limit + 1):
+        if is_abundant(i):
+            abundant_numbers.add(i)
+
+    non_abundant_sums = set(range(1, limit + 1))
+
+    for a in abundant_numbers:
+        for b in abundant_numbers:
+            if a + b <= limit:
+                non_abundant_sums.discard(a + b)
+
+    return sum(non_abundant_sums)
+
+# Calculate the sum of all positive integers which cannot be written as the sum of two abundant numbers
+sum_non_abundant_sums = find_non_abundant_sums(28123)
+
+# Print the result
+print(f"Problem 23 - The sum of all the positive integers which cannot be written as the sum of two abundant numbers is: {sum_non_abundant_sums}")
+
+
+
+# Problem 24:
+# Find the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8, and 9.
+
+import itertools
+
+def find_millionth_permutation(digits):
+    # Generate all lexicographic permutations of the given digits
+    permutations = itertools.permutations(digits)
+
+    # Find the millionth permutation (indexing starts at 0, so we need the 999999th element)
+    millionth_permutation = next(itertools.islice(permutations, 999999, None))
+
+    return ''.join(map(str, millionth_permutation))
+
+# Calculate the millionth lexicographic permutation
+millionth_permutation = find_millionth_permutation([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+# Print the result
+print(f"Problem 24 - The millionth lexicographic permutation of the digits is: {millionth_permutation}")
+
+
+
+# Problem 25:
+# Find the index of the first term in the Fibonacci sequence to contain 1000 digits.
+
+def find_fibonacci_index(digit_count):
+    a, b = 1, 1  # Initialize the first two terms of the Fibonacci sequence
+    index = 2  # Start from the second term
+
+    while len(str(b)) < digit_count:
+        a, b = b, a + b  # Update the terms to the next in the sequence
+        index += 1  # Increment the index
+
+    return index
+
+# Calculate the index of the first Fibonacci number with 1000 digits
+fibonacci_index_1000 = find_fibonacci_index(1000)
+
+# Print the result
+print(f"Problem 25 - The index of the first term in the Fibonacci sequence to contain 1000 digits is: {fibonacci_index_1000}")
+
+
+
+# Problem 26:
+# Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal fraction part.
+
+def find_longest_recurring_cycle(limit):
+    longest_length = 0  # Initialize the longest cycle length
+    d_with_longest_cycle = 0  # Initialize the denominator with the longest cycle
+
+    for d in range(2, limit):
+        remainders = {}  # Store remainders and their positions
+        value, position = 1, 0
+
+        while value != 0:
+            value %= d
+            if value in remainders:
+                # Found a repeating cycle
+                cycle_length = position - remainders[value]
+                if cycle_length > longest_length:
+                    longest_length, d_with_longest_cycle = cycle_length, d
+                break
+            remainders[value] = position
+            value *= 10
+            position += 1
+
+    return d_with_longest_cycle
+
+# Calculate the denominator with the longest recurring cycle in its decimal fraction part for d < 1000
+d_with_longest_cycle = find_longest_recurring_cycle(1000)
+
+# Print the result
+print(f"Problem 26 - The value of d < 1000 with the longest recurring cycle in its decimal fraction part is: {d_with_longest_cycle}")
+
+
+# Problem 27:
+# Find the product of the coefficients, a and b, for the quadratic expression that produces the maximum number of primes for consecutive values of n, starting with n = 0.
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+def find_max_prime_generating_quadratic(limit):
+    max_n = 0  # Initialize the maximum number of consecutive primes generated
+    product = 0  # Initialize the product of coefficients a and b
+
+    for a in range(-limit + 1, limit):
+        for b in range(-limit, limit + 1):
+            n = 0
+            while is_prime(n * n + a * n + b):
+                n += 1
+            if n > max_n:
+                max_n, product = n, a * b
+
+    return product
+
+# Calculate the product of the coefficients for the quadratic expression
+product_of_coefficients = find_max_prime_generating_quadratic(1000)
+
+# Print the result
+print(f"Problem 27 - The product of the coefficients is: {product_of_coefficients}")
+
+
+
+# Problem 28:
+# Calculate the sum of the numbers on the diagonals in a 1001 by 1001 spiral.
+
+def sum_spiral_diagonals(size):
+    total_sum = 1  # Start with the center value, 1
+    current_number = 1  # Initialize the current number in the spiral
+
+    for layer in range(1, (size // 2) + 1):
+        step = layer * 2  # Calculate the step size for the current layer
+        for _ in range(4):  # Each layer has four corners
+            current_number += step  # Calculate the number at the next corner
+            total_sum += current_number  # Add the corner number to the total sum
+
+    return total_sum
+
+# Calculate the sum of the diagonals in a 1001 by 1001 spiral
+spiral_sum = sum_spiral_diagonals(1001)
+
+# Print the result
+print(f"Problem 28 - The sum of the numbers on the diagonals in a 1001 by 1001 spiral is: {spiral_sum}")
+
+
+# Problem 29:
+# Calculate how many distinct terms are in the sequence generated by a^b for 2 <= a <= 100 and 2 <= b <= 100.
+
+def distinct_powers(a_range, b_range):
+    # Use a set to store distinct terms, as sets automatically handle duplicates
+    terms = set()
+
+    for a in range(a_range[0], a_range[1] + 1):
+        for b in range(b_range[0], b_range[1] + 1):
+            terms.add(a**b)  # Add each term a^b to the set
+
+    return len(terms)  # The number of distinct terms is the size of the set
+
+# Calculate the number of distinct terms for the given ranges
+num_distinct_terms = distinct_powers((2, 100), (2, 100))
+
+# Print the result
+print(f"Problem 29 - The number of distinct terms in the sequence is: {num_distinct_terms}")
+
+
+
+# Problem 30:
+# Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
+
+def is_sum_of_fifth_powers(n):
+    # Check if the number can be written as the sum of fifth powers of its digits
+    return n == sum(int(digit)**5 for digit in str(n))
+
+def sum_of_fifth_power_numbers():
+    # A reasonable upper limit can be found by considering that for a d-digit number,
+    # the maximum sum of fifth powers of its digits is d * 9^5. We stop when this maximum
+    # is smaller than the smallest d-digit number (10^(d-1)). For 9^5 = 59049, this happens around 6 digits.
+    upper_limit = 6 * 9**5
+
+    total_sum = 0
+    for i in range(2, upper_limit):
+        if is_sum_of_fifth_powers(i):
+            total_sum += i
+
+    return total_sum
+
+# Calculate the sum of all numbers that can be written as the sum of fifth powers of their digits
+sum_fifth_powers = sum_of_fifth_power_numbers()
+
+# Print the result
+print(f"Problem 30 - The sum of all the numbers that can be written as the sum of fifth powers of their digits is: {sum_fifth_powers}")
